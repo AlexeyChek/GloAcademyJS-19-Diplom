@@ -4764,6 +4764,10 @@ div.wave-block:nth-child(17):after {
   }
 }
 
+.popup-active {
+  visibility: visible;
+}
+
 .popup-dialog {
   position: relative;
   max-width: 1200px;
