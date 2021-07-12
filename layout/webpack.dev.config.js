@@ -13,18 +13,18 @@ module.exports = {
     hot: true,
     writeToDisk: true,
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/env']
-          },
-        },
-        exclude: /node_modules/,
-      }
-    ]
-  }
-}
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.js$/,
+  //       use: {
+  //         loader: 'babel-loader',
+  //         options: {
+  //           presets: ['@babel/env']
+  //         },
+  //       },
+  //       exclude: /node_modules/,
+  //     }
+  //   ]
+  // }
+};
