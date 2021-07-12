@@ -4869,6 +4869,14 @@ div.wave-block:nth-child(17):after {
   }
 }
 
+.popup-dialog-menu_active {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+}
+
 @media (max-width: 575px) and (max-height: 812px) {
   .popup-dialog-menu {
     height: 655px;
