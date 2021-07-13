@@ -31,7 +31,7 @@ class Popup {
         });
       }
     } else {
-      if (target.closest(this.popups[this.popup].closeBtn)) {
+      if (target.closest(this.popups[this.popup].closeBtn) || target === this.popups[this.popup].selector) {
         this.popups[this.popup].selector.classList.remove(this.popups[this.popup].activeClass);
         this.popup = -1;
       }
