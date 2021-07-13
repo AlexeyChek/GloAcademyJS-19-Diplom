@@ -19,6 +19,12 @@ popup.addPopup({
   activeClass: 'popup-active',
   closeBtn: '.close'
 });
+popup.addPopup({
+  callerSelector: ['.link-privacy'],
+  selector: '.popup-privacy',
+  activeClass: 'popup-active',
+  closeBtn: '.close'
+});
 popup.run();
 
 new MaskPhone('input[name="phone"]').init();
