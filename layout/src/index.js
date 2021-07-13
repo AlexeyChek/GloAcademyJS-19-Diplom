@@ -4,6 +4,7 @@ import MenuAndSmooth from './modules/menu';
 import smooth from './modules/smooth';
 import Popup from './modules/popup';
 import MaskPhone from './modules/maskPhone';
+import SendForm from './modules/sendForm';
 
 
 new Phones('.header-contacts__phone-number-accord', '.header-contacts__arrow').run();
@@ -28,4 +29,7 @@ popup.addPopup({
 popup.run();
 
 new MaskPhone('input[name="phone"]').init();
+
+new SendForm('form').init();
+
 
