@@ -42,8 +42,10 @@ class MaskPhone {
   }
 
   getMask(elem) {
+    let cursorPosition = elem.selectionEnd;
     const value = this.getValue.call(this, elem.value);
     elem.value = value;
+    elem.setSelectionRange(cursorPosition, cursorPosition);
   }
 
   endInput(elem) {
