@@ -9036,3 +9036,17 @@ strong {
 .slider-dots {
   display: none;
 }
+
+.formula-item-popup_reverse {
+  bottom: auto;
+  top: 140px;
+  padding-top: 40px;
+}
+
+.formula-item-popup_reverse::before {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+}
