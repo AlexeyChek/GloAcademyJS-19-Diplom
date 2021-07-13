@@ -15,7 +15,6 @@ class Slider {
     this.wrapper.style.overflow = 'hidden';
     this.sliderWidth = this.wrapper.offsetWidth;
     this.slider.style.width = this.sliderWidth * this.slide.length + 'px';
-    console.log(this);
     this.moveSlider();
   }
 
