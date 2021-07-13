@@ -21,13 +21,13 @@ class MaskPhone {
       maskedValue = maskedValue.replace('d', value[i]);
     }
     if (maskedValue.indexOf('d') > 0) maskedValue = maskedValue.slice(0, maskedValue.indexOf('d'));
+    if (maskedValue.length > 4) maskedValue = maskedValue.replace(/[^0-9]+$/, '');
     return maskedValue;
   }
 
   getValue(value) {
     if (value.length > this.value.length) {
-      this.value += value.slice(this.value.length);
-      this.value = this.chekValue.call(this, this.value);
+      this.value = this.chekValue.call(this, value);
       return this.value;
     } else {
       if (value.length < 4) {
@@ -42,10 +42,10 @@ class MaskPhone {
   }
 
   getMask(elem) {
-    let cursorPosition = elem.selectionEnd;
-    const value = this.getValue.call(this, elem.value);
-    elem.value = value;
-    elem.setSelectionRange(cursorPosition, cursorPosition);
+    let length = elem.value.length;
+    let pos = elem.selectionStart;
+    elem.value = this.getValue.call(this, elem.value);
+    if (length > pos) elem.setSelectionRange(pos, pos);
   }
 
   endInput(elem) {
