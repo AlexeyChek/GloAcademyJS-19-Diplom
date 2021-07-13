@@ -1135,8 +1135,14 @@ template,
 }
 
 .formula-slider {
+  display: flex;
   min-height: 400px;
-  margin-top: 102px;
+  margin-bottom: 102px;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
 }
 
 @media (max-width: 575px) {
@@ -1199,6 +1205,7 @@ template,
 
 @media (max-width: 575px) {
   .formula-slider-wrap {
+    overflow: hidden;
     width: 290px;
     margin-left: auto;
     margin-right: auto;
@@ -9049,4 +9056,8 @@ strong {
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);
+}
+
+.unvisible {
+  visibility: hidden;
 }
