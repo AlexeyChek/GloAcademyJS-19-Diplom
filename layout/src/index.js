@@ -41,15 +41,6 @@ new FormulaItemHint(
   'formula-item-popup_reverse'
 ).init();
 
-const formulaSlider = new Slider({
-  wraper: '.formula-slider-wrap',
-  slider: '.formula-slider',
-  slide: '.formula-slider__slide',
-  prev: '#formula-arrow_left',
-  next: '#formula-arrow_right'
-}
-).init();
-
 const repairSliders = () => {
   const sliders = [];
   for (let i = 1; i <= 5; i++) {
@@ -77,29 +68,48 @@ const tabs = new Tabs(
 ).init();
 
 let widthMatch = window.matchMedia('(max-width: 1024px)');
-let slider = null;
+let RepairSlider = null;
+let formulaSlider = null;
+const formulaSliderWraper = document.querySelector('.nav-list-repair');
+
+const getSlidersMobile = () =>{
+  RepairSlider = new Slider({
+    wraper: '.repair-types-nav',
+    slider: '.nav-list-repair',
+    slide: '.repair-types-nav__item',
+    prev: '#nav-arrow-repair-left_base',
+    next: '#nav-arrow-repair-right_base',
+  }).init();
+
+  formulaSlider = new Slider({
+    wraper: '.formula-slider-wrap',
+    slider: '.formula-slider',
+    slide: '.formula-slider__slide',
+    prev: '#formula-arrow_left',
+    next: '#formula-arrow_right'
+  }).init();
+};
+
+if (document.documentElement.clientWidth <= 1024) getSlidersMobile();
+
 widthMatch.addEventListener('change', widthChange => {
   if (widthChange.matches) {
-    slider = new Slider({
-      wraper: '.repair-types-nav',
-      slider: '.nav-list-repair',
-      slide: '.repair-types-nav__item',
-      prev: '#nav-arrow-repair-left_base',
-      next: '#nav-arrow-repair-right_base',
-    }).init();
+    getSlidersMobile();
   } else {
-    slider = null;
+    formulaSlider = null;
+    formulaSliderWraper.style = '';
+    RepairSlider = null;
   }
 });
 
-// if (document.documentElement.clientWidth <= 1024) {
-//   const slider = new Slider({
-//     wraper: '.repair-types-nav',
-//     slider: '.nav-list-repair',
-//     slide: '.repair-types-nav__item',
-//     prev: '#nav-arrow-repair-left_base',
-//     next: '#nav-arrow-repair-right_base',
-//   }).init();
-// };
+// const portfolioSlider = new Slider({
+//   wraper: '.portfolio-slider-wrap',
+//   slider: '.portfolio-slider',
+//   slide: '.portfolio-slider__slide',
+//   prev: '#portfolio-arrow_left',
+//   next: '#portfolio-arrow_right',
+//   slideShow: 3
+// }).init();
+
 
 

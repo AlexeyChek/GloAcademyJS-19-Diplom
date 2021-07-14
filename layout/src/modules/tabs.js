@@ -9,32 +9,26 @@ class Tabs {
     this.tabHeight = this.tabs[0].offsetHeight;
   }
 
-  getTab({ target, position }) {
-    if (target && target !== this.tabsBtn[this.position]) {
-      this.tabsBtn[this.position].classList.remove(this.tabsBtnActivClass);
-      this.tabs[this.position].disableSlider();
-      this.tabs[this.position].hideSlider();
-      this.tabsBtn.forEach((elem, index) => {
-        if (target === elem) {
-          this.position = index;
-          elem.classList.add(this.tabsBtnActivClass);
-          this.tabs[index].showSlider();
-          this.tabs[index].enableSlider();
-        }
-      });
-    } else {
-      if (position) this.getTab.call(this, { trget: this.tabs[position] });
+  getTab(target) {
+    for (let i = 0; i < this.tabsBtn.length; i++) {
+      this.tabsBtn[i].classList.remove(this.tabsBtnActivClass);
+      this.tabs[i].disableSlider();
+      this.tabs[i].hideSlider();
+      if (target === this.tabsBtn[i]) {
+        this.position = i;
+        this.tabsBtn[i].classList.add(this.tabsBtnActivClass);
+        this.tabs[i].enableSlider();
+        this.tabs[i].showSlider();
+      }
     }
   }
 
   init() {
     this.wraper.addEventListener('click', event => {
       const target = event.target.closest(this.tabsBtnSelector);
-      this.getTab.call(this, { target });
+      this.getTab.call(this, target);
     });
-    for (let i = this.tabsBtn.length; i >= 0; i--) {
-      this.getTab({ position: i });
-    }
+    this.getTab.call(this, this.tabsBtn[0]);
   }
 }
 

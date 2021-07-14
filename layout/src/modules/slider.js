@@ -8,7 +8,6 @@ class Slider {
     slideNum,
     slideCount,
     isEnabled,
-    activeSlideAction,
   }) {
     this.wraper = document.querySelector(wraper);
     this.slider = document.querySelector(slider);
@@ -68,7 +67,6 @@ class Slider {
       }
       if (this.slideNum) this.slideNum.textContent = this.position + 1;
       if (this.slideCount) this.slideCount.textContent = this.slide.length;
-      if (this.addActiveClass) this.addActiveClass();
     }
   }
 
@@ -76,10 +74,12 @@ class Slider {
     this.isEnabled = true;
     this.updateSlider();
     this.moveSlider();
+    this.addListeners();
   }
 
   disableSlider() {
     this.isEnabled = false;
+    this.removeListeners();
   }
 
   prevSlide() {
