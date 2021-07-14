@@ -52,13 +52,14 @@ const repairSliders = () => {
       next: '#repair-types-arrow_right',
       slideNum: '.slider-counter-content__current',
       slideCount: '.slider-counter-content__total',
-      isEnabled: i === 1
+      isDisabled: i === 1 ? '' : true
     });
     slider.init();
     sliders.push(slider);
   }
   return sliders;
 };
+
 
 const tabs = new Tabs(
   '.nav-list-repair',
@@ -67,13 +68,13 @@ const tabs = new Tabs(
   repairSliders()
 ).init();
 
-let widthMatch = window.matchMedia('(max-width: 1024px)');
-let RepairSlider = null;
+const widthMatch = window.matchMedia('(max-width: 1024px)');
+let repairSlider = null;
 let formulaSlider = null;
 const formulaSliderWraper = document.querySelector('.nav-list-repair');
 
-const getSlidersMobile = () =>{
-  RepairSlider = new Slider({
+const getSlidersMobile = () => {
+  repairSlider = new Slider({
     wraper: '.repair-types-nav',
     slider: '.nav-list-repair',
     slide: '.repair-types-nav__item',
@@ -98,7 +99,7 @@ widthMatch.addEventListener('change', widthChange => {
   } else {
     formulaSlider = null;
     formulaSliderWraper.style = '';
-    RepairSlider = null;
+    repairSlider = null;
   }
 });
 
@@ -110,6 +111,7 @@ widthMatch.addEventListener('change', widthChange => {
 //   next: '#portfolio-arrow_right',
 //   slideShow: 3
 // }).init();
+
 
 
 

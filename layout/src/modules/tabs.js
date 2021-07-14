@@ -26,9 +26,8 @@ class Tabs {
   init() {
     this.wraper.addEventListener('click', event => {
       const target = event.target.closest(this.tabsBtnSelector);
-      this.getTab.call(this, target);
+      if (target) this.getTab.call(this, target);
     });
-    this.getTab.call(this, this.tabsBtn[0]);
   }
 }
 

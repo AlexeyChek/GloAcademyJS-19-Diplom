@@ -7,7 +7,8 @@ class Slider {
     next,
     slideNum,
     slideCount,
-    isEnabled,
+    isDisabled,
+    slideShow
   }) {
     this.wraper = document.querySelector(wraper);
     this.slider = document.querySelector(slider);
@@ -21,7 +22,8 @@ class Slider {
     this.position = 0;
     this.slideNum = document.querySelector(slideNum);
     this.slideCount = document.querySelector(slideCount);
-    this.isEnabled = isEnabled || true;
+    this.isDisabled = !!isDisabled;
+    this.slideShow = slideShow || 1;
     this.listener = event => {
       const target = event.target;
       if (target.closest(this.prev)) this.prevSlide.call(this);
@@ -53,7 +55,7 @@ class Slider {
   }
 
   moveSlider() {
-    if (this.isEnabled) {
+    if (!this.isDisabled) {
       this.slider.style.transform = `translateX(-${this.position * this.sliderWidth}px)`;
       if (this.position === 0) {
         this.prevBtn.classList.add('unvisible');
@@ -71,14 +73,14 @@ class Slider {
   }
 
   enableSlider() {
-    this.isEnabled = true;
+    this.isDisabled = false;
     this.updateSlider();
     this.moveSlider();
     this.addListeners();
   }
 
   disableSlider() {
-    this.isEnabled = false;
+    this.isDisabled = true;
     this.removeListeners();
   }
 
@@ -97,7 +99,7 @@ class Slider {
   }
 
   addListeners() {
-    if (this.isEnabled) {
+    if (!this.isDisabled) {
       this.wraper.parentNode.addEventListener('click', this.listener);
     }
   }
