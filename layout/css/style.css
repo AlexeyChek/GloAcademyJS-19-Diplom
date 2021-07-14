@@ -8053,6 +8053,7 @@ div.wave-block:nth-child(17):after {
 .active-item {
   font-size: 20px;
   opacity: 1;
+  z-index: 2;
 }
 
 .active-item .formula-item__icon {
