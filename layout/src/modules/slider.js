@@ -8,11 +8,12 @@ class Slider {
     slideNum,
     slideCount,
     isDisabled,
-    slideShow
+    slideShow,
+    breakPoints
   }) {
     this.wraper = document.querySelector(wraper);
-    this.slider = document.querySelector(slider);
-    this.slide = document.querySelectorAll(slide);
+    this.slider = this.wraper.querySelector(slider);
+    this.slide = this.slider.querySelectorAll(slide);
     this.prev = prev;
     this.prevBtn = document.querySelector(prev);
     this.next = next;
@@ -20,10 +21,16 @@ class Slider {
     this.sliderWidth = 0;
     this.sliderHeight = 0;
     this.position = 0;
-    this.slideNum = document.querySelector(slideNum);
-    this.slideCount = document.querySelector(slideCount);
+    this.slideNum = this.wraper.parentNode.querySelector(slideNum);
+    this.slideCount = this.wraper.parentNode.querySelector(slideCount);
     this.isDisabled = !!isDisabled;
     this.slideShow = slideShow || 1;
+    this.breakPoints = breakPoints;
+    if (breakPoints) {
+      this.breakPointsKeys = Object.keys(breakPoints);
+      this.breakPointsKeys.forEach((key, i) => this.breakPointsKeys[i] = +key);
+      this.breakPointsKeys.sort((a, b) => a - b);
+    }
     this.listener = event => {
       const target = event.target;
       if (target.closest(this.prev)) this.prevSlide.call(this);
@@ -45,24 +52,28 @@ class Slider {
 
   updateSlider() {
     this.wraper.style.overflow = 'hidden';
-    this.sliderWidth = this.wraper.offsetWidth;
-    this.sliderHeight = this.wraper.offsetHeight;
-    this.slider.style.height = this.sliderHeight + 'px';
-    this.slider.style.width = this.sliderWidth * this.slide.length + 'px';
-    this.slider.style.maxWidth = this.sliderWidth * this.slide.length + 'px';
     this.slider.style.justifyContent = 'space-around';
+
+    this.sliderWidth = this.wraper.offsetWidth;
+    this.slider.style.width = this.sliderWidth / this.slideShow * this.slide.length + 'px';
+    this.slider.style.maxWidth = this.sliderWidth / this.slideShow * this.slide.length + 'px';
+
+    this.slide.forEach(slide => slide.style.width = this.sliderWidth / this.slideShow + 'px');
+
+    this.position = 0;
+
     this.moveSlider();
   }
 
   moveSlider() {
     if (!this.isDisabled) {
-      this.slider.style.transform = `translateX(-${this.position * this.sliderWidth}px)`;
+      this.slider.style.transform = `translateX(-${this.position * this.sliderWidth / this.slideShow}px)`;
       if (this.position === 0) {
         this.prevBtn.classList.add('unvisible');
       } else {
         this.prevBtn.classList.remove('unvisible');
       }
-      if (this.position === this.slide.length - 1) {
+      if (this.position === this.slide.length - this.slideShow) {
         this.nextBtn.classList.add('unvisible');
       } else {
         this.nextBtn.classList.remove('unvisible');
@@ -92,7 +103,7 @@ class Slider {
   }
 
   nextSlide() {
-    if (this.position < this.slide.length - 1) {
+    if (this.position < this.slide.length - this.slideShow) {
       this.position++;
       this.moveSlider.call(this);
     }
@@ -111,7 +122,26 @@ class Slider {
   init() {
     this.updateSlider();
     this.addListeners();
+    this.resizeListener();
+  }
+
+  resizeListener() {
+    window.addEventListener('resize', () => {
+      if (this.breakPointsKeys) {
+        this.breakPointsKeys.forEach(key => {
+          if (document.documentElement.clientWidth > key) {
+            for (const option in this.breakPoints[key]) {
+              this[option] = this.breakPoints[key][option];
+              break;
+            }
+          }
+        });
+      }
+      this.updateSlider();
+    });
   }
 }
+
+
 
 export default Slider;

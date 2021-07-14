@@ -68,12 +68,13 @@ const tabs = new Tabs(
   repairSliders()
 ).init();
 
-const widthMatch = window.matchMedia('(max-width: 1024px)');
 let repairSlider = null;
 let formulaSlider = null;
 const formulaSliderWraper = document.querySelector('.nav-list-repair');
+const tabsBtn = document.querySelectorAll('.repair-types-nav__item');
+let portfolioSliderMobile = null;
 
-const getSlidersMobile = () => {
+const getSlidersTablet = () => {
   repairSlider = new Slider({
     wraper: '.repair-types-nav',
     slider: '.nav-list-repair',
@@ -87,30 +88,69 @@ const getSlidersMobile = () => {
     slider: '.formula-slider',
     slide: '.formula-slider__slide',
     prev: '#formula-arrow_left',
-    next: '#formula-arrow_right'
+    next: '#formula-arrow_right',
+    slideShow: 3,
   }).init();
 };
 
-if (document.documentElement.clientWidth <= 1024) getSlidersMobile();
+const getSlidersMobile = () => {
+  portfolioSliderMobile = new Slider({
+    wraper: '.portfolio-slider-wraper-mobile',
+    slider: '.portfolio-slider-mobile',
+    slide: '.portfolio-slider__slide-frame',
+    prev: '#portfolio-arrow-mobile_left',
+    next: '#portfolio-arrow-mobile_right',
+    slideNum: '.slider-counter-content__current',
+    slideCount: '.slider-counter-content__total'
+  }).init();
+};
 
-widthMatch.addEventListener('change', widthChange => {
+if (document.documentElement.clientWidth <= 1024) getSlidersTablet();
+if (document.documentElement.clientWidth <= 575) getSlidersMobile();
+
+const widthTableMatch = window.matchMedia('(max-width: 1024px)');
+widthTableMatch.addEventListener('change', widthChange => {
   if (widthChange.matches) {
-    getSlidersMobile();
+    getSlidersTablet();
   } else {
     formulaSlider = null;
     formulaSliderWraper.style = '';
+    tabsBtn.forEach(elem => elem.style = '');
     repairSlider = null;
   }
 });
 
-// const portfolioSlider = new Slider({
-//   wraper: '.portfolio-slider-wrap',
-//   slider: '.portfolio-slider',
-//   slide: '.portfolio-slider__slide',
-//   prev: '#portfolio-arrow_left',
-//   next: '#portfolio-arrow_right',
-//   slideShow: 3
-// }).init();
+let portfolioSlider = null;
+
+const getSlidersDesctop = () => {
+  portfolioSlider = new Slider({
+    wraper: '.portfolio-slider-wraper',
+    slider: '.portfolio-slider',
+    slide: '.portfolio-slider__slide',
+    prev: '#portfolio-arrow_left',
+    next: '#portfolio-arrow_right',
+    slideShow: 3,
+    breakPoints: {
+      '1140': { slideShow: 3 },
+      '900': { slideShow: 2 },
+      '575': { slideShow: 1 },
+    }
+  }).init();
+};
+
+if (document.documentElement.clientWidth > 575) getSlidersDesctop();
+
+const widthMobileMatch = window.matchMedia('(max-width: 1024px)');
+widthMobileMatch.addEventListener('change', widthChange => {
+  if (widthChange.matches) {
+    portfolioSlider = null;
+    getSlidersMobile();
+  } else {
+    portfolioSliderMobile = null;
+    getSlidersDesctop();
+  }
+});
+
 
 
 

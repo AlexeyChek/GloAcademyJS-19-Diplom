@@ -26,7 +26,7 @@ class SendForm {
         }
       }
       if (elem.name === 'name') {
-        if (elem.value.length > 2) {
+        if (elem.value.length >= 2) {
           result--;
         } else {
           const errorMessage = this.getErorMesage.call(this, 'Введите коректное значение');
