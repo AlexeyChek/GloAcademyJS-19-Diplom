@@ -76,14 +76,30 @@ const tabs = new Tabs(
   repairSliders()
 ).init();
 
-if (document.documentElement.clientWidth <= 1024) {
-  const slider = new Slider({
-    wraper: '.repair-types-nav',
-    slider: '.nav-list-repair',
-    slide: '.repair-types-nav__item',
-    prev: '#nav-arrow-repair-left_base',
-    next: '#nav-arrow-repair-right_base',
-  }).init();
-};
+let widthMatch = window.matchMedia('(max-width: 1024px)');
+let slider = null;
+widthMatch.addEventListener('change', widthChange => {
+  if (widthChange.matches) {
+    slider = new Slider({
+      wraper: '.repair-types-nav',
+      slider: '.nav-list-repair',
+      slide: '.repair-types-nav__item',
+      prev: '#nav-arrow-repair-left_base',
+      next: '#nav-arrow-repair-right_base',
+    }).init();
+  } else {
+    slider = null;
+  }
+});
+
+// if (document.documentElement.clientWidth <= 1024) {
+//   const slider = new Slider({
+//     wraper: '.repair-types-nav',
+//     slider: '.nav-list-repair',
+//     slide: '.repair-types-nav__item',
+//     prev: '#nav-arrow-repair-left_base',
+//     next: '#nav-arrow-repair-right_base',
+//   }).init();
+// };
 
 
