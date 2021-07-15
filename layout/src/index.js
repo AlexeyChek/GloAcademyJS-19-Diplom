@@ -8,7 +8,13 @@ import FormulaItemHint from './modules/formulaItemHint';
 import Slider from './modules/slider';
 import Tabs from './modules/tabs';
 import Acardion from './modules/acardion';
+import GetDBInfo from './modules/getDBInfo';
 
+const dbInfo = new GetDBInfo({
+  server: './../../crm-backend/db.json',
+
+});
+dbInfo.getInfo();
 
 new Phones('.header-contacts__phone-number-accord', '.header-contacts__arrow').run();
 
@@ -24,61 +30,63 @@ new FormulaItemHint(
   'active-item',
   '.formula-item-popup',
   'formula-item-popup_reverse'
-  ).init();
-  
-  const repairSliders = () => {
-    const sliders = [];
-    for (let i = 1; i <= 5; i++) {
-      const slider = new Slider({
-        wraper: '.repair-types-slider',
-        slider: `.types-repair${i}`,
-        slide: `.types-repair${i} .repair-types-slider__slide`,
-        prev: '#repair-types-arrow_left',
-        next: '#repair-types-arrow_right',
-        slideNum: '.slider-counter-content__current',
-        slideCount: '.slider-counter-content__total',
-        isDisabled: i === 1 ? '' : true
-      });
-      slider.init();
-      sliders.push(slider);
-    }
-    return sliders;
-  };
-  
-  const repairTabs = new Tabs({
-    wraper: '.nav-list-repair',
-    tabsBtn: '.repair-types-nav__item',
-    tabsBtnActivClass: 'active',
-    tabs: repairSliders()
-  });
-  repairTabs.init();
+).init();
 
-  let repairSlider = null;
-  let formulaSlider = null;
-  const formulaSliderWraper = document.querySelector('.nav-list-repair');
-  const tabsBtn = document.querySelectorAll('.repair-types-nav__item');
-  let portfolioSliderMobile = null;
-  
-  const portfolioPopupText = new Tabs({
-    wraper: '.popup-dialog-portfolio',
-    tabsBtn: '.popup-portfolio-text',
-    tabsBtnActivClass: 'popup-portfolio-text-active',
-  });
-  portfolioPopupText.init();
-  
-  const portfolioPopupSlider = new Slider({
-    wraper: '.popup-portfolio-slider-wraper',
-    slider: '.popup-portfolio-slider',
-    slide: '.popup-portfolio-slider__slide',
-    prev: '#popup_portfolio_left',
-    next: '#popup_portfolio_right',
-    slideNum: '.slider-counter-content__current',
-    slideCount: '.slider-counter-content__total',
-    callBack: portfolioPopupText.getActiveTab.bind(portfolioPopupText)
-  });
-  portfolioPopupSlider.init();
-  
-  const getSlidersTablet = () => {
+const repairSliders = () => {
+  const sliders = [];
+  for (let i = 1; i <= 5; i++) {
+    const slider = new Slider({
+      wraper: '.repair-types-slider',
+      slider: `.types-repair${i}`,
+      slide: `.types-repair${i} .repair-types-slider__slide`,
+      prev: '#repair-types-arrow_left',
+      next: '#repair-types-arrow_right',
+      slideNum: '.slider-counter-content__current',
+      slideCount: '.slider-counter-content__total',
+      isDisabled: i === 1 ? '' : true
+    });
+    slider.init();
+    sliders.push(slider);
+  }
+  return sliders;
+};
+
+const repairTabs = new Tabs({
+  wraper: '.nav-list-repair',
+  tabsBtn: '.repair-types-nav__item',
+  tabsBtnActivClass: 'active',
+  tabs: repairSliders()
+});
+repairTabs.init();
+
+let repairSlider = null;
+let formulaSlider = null;
+const formulaSliderWraper = document.querySelector('.nav-list-repair');
+const tabsBtn = document.querySelectorAll('.repair-types-nav__item');
+let portfolioSliderMobile = null;
+
+const portfolioPopupText = new Tabs({
+  wraper: '.popup-dialog-portfolio',
+  tabsBtn: '.popup-portfolio-text',
+  tabsBtnActivClass: 'popup-portfolio-text-active',
+});
+portfolioPopupText.init();
+
+const portfolioPopupSlider = new Slider({
+  wraper: '.popup-portfolio-slider-wraper',
+  slider: '.popup-portfolio-slider',
+  slide: '.popup-portfolio-slider__slide',
+  prev: '#popup_portfolio_left',
+  next: '#popup_portfolio_right',
+  slideNum: '.slider-counter-content__current',
+  slideCount: '.slider-counter-content__total',
+  callBack: portfolioPopupText.getActiveTab.bind(portfolioPopupText)
+});
+portfolioPopupSlider.init();
+
+let popupRepairSlider = null;
+
+const getSlidersTablet = () => {
   repairSlider = new Slider({
     wraper: '.repair-types-nav',
     slider: '.nav-list-repair',
@@ -88,7 +96,7 @@ new FormulaItemHint(
     callBack: repairTabs.getActiveTab.bind(repairTabs)
   });
   repairSlider.init();
-  
+
   formulaSlider = new Slider({
     wraper: '.formula-slider-wrap',
     slider: '.formula-slider',
@@ -102,6 +110,18 @@ new FormulaItemHint(
     }
   });
   formulaSlider.init();
+
+  setTimeout(() => {
+    popupRepairSlider = new Slider({
+      wraper: '.nav-popup-repair-types-wraper',
+      slider: '.nav-list-popup-repair',
+      slide: '.popup-repair-types-nav__item',
+      prev: '#nav-arrow-popup-repair_left',
+      next: '#nav-arrow-popup-repair_right',
+      callBack: dbInfo.getPageInfo.bind(dbInfo)
+    });
+    popupRepairSlider.init();
+  }, 1000);
 };
 
 const getSlidersMobile = () => {
@@ -129,6 +149,8 @@ widthTableMatch.addEventListener('change', widthChange => {
     repairSlider = null;
     if (formulaSlider) formulaSlider.deleteSlider.call(formulaSlider);
     formulaSlider = null;
+    if (popupRepairSlider) popupRepairSlider.deleteSlider.call(popupRepairSlider);
+    popupRepairSlider = null;
   }
 });
 
