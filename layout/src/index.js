@@ -247,6 +247,12 @@ popup.addPopup({
   activeClass: 'popup-active',
   closeBtn: '.close',
 });
+popup.addPopup({
+  callerSelector: ['.consult'],
+  selector: '.popup-consultation',
+  activeClass: 'popup-active',
+  closeBtn: '.close',
+});
 popup.run();
 
 
