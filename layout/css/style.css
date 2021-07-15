@@ -5006,6 +5006,8 @@ div.wave-block:nth-child(17):after {
   height: 616px;
   background: #322823;
   border-radius: 20px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 @media (max-width: 1024px) {
@@ -6488,7 +6490,8 @@ div.wave-block:nth-child(17):after {
   width: 432px;
   height: 565px;
   border-radius: 10px;
-  overflow: hidden;
+  display: flex;
+
 }
 
 @media (max-width: 575px) {
@@ -6510,12 +6513,31 @@ div.wave-block:nth-child(17):after {
 
 .popup-transparency-slider-wrap {
   position: relative;
+  width: 100%;
+}
+
+.popup-transparency-slider-wraper {
+  position: relative;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  overflow: hidden;
 }
 
 @media (max-width: 575px) {
   .popup-transparency-slider {
     width: 300px;
     height: 453px;
+  }
+
+  .popup-transparency-slider-wraper {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
   }
 }
 

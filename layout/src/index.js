@@ -163,27 +163,6 @@ widthMobileMatch.addEventListener('change', widthChange => {
   }
 });
 
-const popup = new Popup();
-popup.addPopup({
-  callerSelector: ['.popup-servises'],
-  selector: '.popup-repair-types',
-  activeClass: 'popup-active',
-  closeBtn: '.close'
-});
-popup.addPopup({
-  callerSelector: ['.link-privacy'],
-  selector: '.popup-privacy',
-  activeClass: 'popup-active',
-  closeBtn: '.close'
-});
-popup.addPopup({
-  callerSelector: ['.portfolio-slider__slide-frame'],
-  selector: '.popup-portfolio',
-  activeClass: 'popup-active',
-  closeBtn: '.close',
-});
-popup.run();
-
 const getPortfolioPopupSlide = () => {
   document.querySelector('.portfolio-slider-wraper').addEventListener('click', event => {
     const target = event.target.closest('.portfolio-slider__slide-frame');
@@ -218,4 +197,57 @@ widthTransparencySliderMatch.addEventListener('change', widthChange => {
     getTransparencySlider();
   }
 });
+
+
+const transparencyPopupSlider = new Slider({
+  wraper: '.popup-transparency-slider-wraper',
+  slider: '.popup-transparency-slider',
+  slide: '.popup-transparency-slider__slide',
+  prev: '#transparency_left',
+  next: '#transparency_right',
+  slideNum: '.slider-counter-content__current',
+  slideCount: '.slider-counter-content__total',
+  callBack: portfolioPopupText.getActiveTab.bind(portfolioPopupText)
+});
+transparencyPopupSlider.init();
+transparencyPopupSlider.setPosition(1);
+
+const getTransparencyPopupSlide = () => {
+  document.querySelector('.transparency-slider').addEventListener('click', event => {
+    const target = event.target.closest('.transparency-item');
+    if (target) {
+      transparencyPopupSlider.setPosition.call(transparencyPopupSlider, target.dataset.position);
+    }
+  });
+};
+getTransparencyPopupSlide();
+
+const popup = new Popup();
+popup.addPopup({
+  callerSelector: ['.popup-servises'],
+  selector: '.popup-repair-types',
+  activeClass: 'popup-active',
+  closeBtn: '.close'
+});
+popup.addPopup({
+  callerSelector: ['.link-privacy'],
+  selector: '.popup-privacy',
+  activeClass: 'popup-active',
+  closeBtn: '.close'
+});
+popup.addPopup({
+  callerSelector: ['.portfolio-slider__slide-frame'],
+  selector: '.popup-portfolio',
+  activeClass: 'popup-active',
+  closeBtn: '.close',
+});
+popup.addPopup({
+  callerSelector: ['.transparency-item'],
+  selector: '.popup-transparency',
+  activeClass: 'popup-active',
+  closeBtn: '.close',
+});
+popup.run();
+
+
 

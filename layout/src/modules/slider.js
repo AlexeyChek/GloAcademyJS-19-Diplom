@@ -16,9 +16,9 @@ class Slider {
     this.slider = this.wraper.querySelector(slider);
     this.slide = this.slider.querySelectorAll(slide);
     this.prev = prev;
-    this.prevBtn = document.querySelector(prev);
+    this.prevBtn = this.wraper.parentNode.querySelector(prev);
     this.next = next;
-    this.nextBtn = document.querySelector(next);
+    this.nextBtn = this.wraper.parentNode.querySelector(next);
     this.sliderWidth = 0;
     this.sliderHeight = 0;
     this.position = 0;
