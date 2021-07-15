@@ -1,7 +1,12 @@
 class SendForm {
-  constructor(selector, errorClassName = 'send-form-message-error') {
+  constructor({
+    selector,
+    errorClassName,
+    callBack,
+  }) {
     this.forms = document.querySelectorAll(selector);
-    this.errorClassName = errorClassName;
+    this.errorClassName = errorClassName || 'send-form-message-error';
+    this.callBack = callBack;
   }
 
   getErorMesage(message) {
@@ -61,6 +66,7 @@ class SendForm {
         if (response.status !== 200) {
           throw new Error('status network not 200');
         }
+        if (this.callBack) this.callBack();
         return;
       }).catch(error => {
         console.error(error);
