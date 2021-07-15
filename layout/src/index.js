@@ -143,6 +143,14 @@ const getSlidersDesctop = () => {
       '900': { slideShow: 2 },
       '575': { slideShow: 1 },
     },
+    callBack: () => {
+      portfolioSlider.wraper.addEventListener('click', event => {
+        const target = event.target.closest('.portfolio-slider__slide-frame');
+        if (target) {
+          portfolioPopupSlider.setPosition.call(portfolioPopupSlider, target.dataset.position);
+        }
+      });
+    },
   });
   portfolioSlider.init();
 };

@@ -46,9 +46,8 @@ class Slider {
   }
 
   setPosition(position) {
-    console.log(this);
     this.position = position;
-    this.recalculate();
+    this.moveSlider.call(this);
   }
 
   hideSlider() {
@@ -87,7 +86,7 @@ class Slider {
       } else {
         this.nextBtn.classList.remove('unvisible');
       }
-      if (this.slideNum) this.slideNum.textContent = this.position + 1;
+      if (this.slideNum) this.slideNum.textContent = +this.position + 1;
       if (this.slideCount) this.slideCount.textContent = this.slide.length;
     }
     if (this.callBack) this.callBack(this.position);
@@ -158,7 +157,6 @@ class Slider {
   }
 
   clearStyles() {
-    console.log(this);
     this.wraper.style.overflow = '';
     this.slider.style.justifyContent = '';
     this.slider.style.width = '';
