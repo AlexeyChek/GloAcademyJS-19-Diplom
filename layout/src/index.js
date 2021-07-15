@@ -7,6 +7,7 @@ import SendForm from './modules/sendForm';
 import FormulaItemHint from './modules/formulaItemHint';
 import Slider from './modules/slider';
 import Tabs from './modules/tabs';
+import Acardion from './modules/acardion';
 
 
 new Phones('.header-contacts__phone-number-accord', '.header-contacts__arrow').run();
@@ -268,5 +269,10 @@ popup.addPopup({
 });
 popup.run();
 
-
-
+const acardion = new Acardion({
+  wraper: '.accordion',
+  acardion: 'ul',
+  elems: 'h2',
+  elemsActiveClass: 'msg-active'
+});
+acardion.init();
