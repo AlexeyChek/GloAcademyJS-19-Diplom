@@ -4200,8 +4200,14 @@ div.wave-block:nth-child(17):after {
 }
 
 .reviews-slider {
+  display: flex;
   height: 314px;
   overflow: hidden;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
 }
 
 .reviews-slider-wrap {
@@ -4211,6 +4217,8 @@ div.wave-block:nth-child(17):after {
   margin-left: auto;
   margin-right: auto;
 }
+
+.reviews-slider-wraper {}
 
 @media (max-width: 1024px) {
   .reviews-slider-wrap {

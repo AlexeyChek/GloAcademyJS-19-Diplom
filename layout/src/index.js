@@ -95,7 +95,11 @@ const getSlidersTablet = () => {
     slide: '.formula-slider__slide',
     prev: '#formula-arrow_left',
     next: '#formula-arrow_right',
-    slideShow: 3,
+    slideShow: 1,
+    breakPoints: {
+      '768': { slideShow: 3 },
+      '0': { slideShow: 1 }
+    }
   });
   formulaSlider.init();
 };
@@ -221,6 +225,15 @@ const getTransparencyPopupSlide = () => {
   });
 };
 getTransparencyPopupSlide();
+
+const reviewsSlider = new Slider({
+  wraper: '.reviews-slider-wraper',
+  slider: '.reviews-slider',
+  slide: '.reviews-slider__slide',
+  prev: '#reviews-arrow_left',
+  next: '#reviews-arrow_right',
+});
+reviewsSlider.init();
 
 const popup = new Popup();
 popup.addPopup({
