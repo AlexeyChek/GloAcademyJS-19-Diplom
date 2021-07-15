@@ -129,7 +129,8 @@ class Slider {
   }
 
   init() {
-    this.recalculate();
+    this.recalculate.call(this);
+    this.updateSlider();
     this.addListeners();
     this.resizeListener();
   }
@@ -165,6 +166,7 @@ class Slider {
   }
 
   deleteSlider() {
+    this.callBack = '';
     this.removeListeners.call(this);
     this.removeRsizeListener.call(this);
     this.clearStyles.call(this);

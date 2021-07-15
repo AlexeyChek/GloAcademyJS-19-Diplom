@@ -2485,7 +2485,7 @@ div.wave-block:nth-child(17):after {
 
 @media (max-width: 1090px) {
   .transparency-slider.row {
-    display: block;
+    display: flex;
   }
 }
 
