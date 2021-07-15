@@ -9,7 +9,8 @@ class Slider {
     slideCount,
     isDisabled,
     slideShow,
-    breakPoints
+    breakPoints,
+    callBack
   }) {
     this.wraper = document.querySelector(wraper);
     this.slider = this.wraper.querySelector(slider);
@@ -36,10 +37,18 @@ class Slider {
       if (target.closest(this.prev)) this.prevSlide.call(this);
       if (target.closest(this.next)) this.nextSlide.call(this);
     };
+    this.resListener = this.recalculate.bind(this);
+    this.callBack = callBack || null;
   }
 
   getPosition() {
     return this.position;
+  }
+
+  setPosition(position) {
+    console.log(this);
+    this.position = position;
+    this.recalculate();
   }
 
   hideSlider() {
@@ -81,6 +90,7 @@ class Slider {
       if (this.slideNum) this.slideNum.textContent = this.position + 1;
       if (this.slideCount) this.slideCount.textContent = this.slide.length;
     }
+    if (this.callBack) this.callBack(this.position);
   }
 
   enableSlider() {
@@ -120,25 +130,46 @@ class Slider {
   }
 
   init() {
-    this.updateSlider();
+    this.recalculate();
     this.addListeners();
     this.resizeListener();
   }
 
-  resizeListener() {
-    window.addEventListener('resize', () => {
-      if (this.breakPointsKeys) {
-        this.breakPointsKeys.forEach(key => {
-          if (document.documentElement.clientWidth > key) {
-            for (const option in this.breakPoints[key]) {
-              this[option] = this.breakPoints[key][option];
-              break;
-            }
+  recalculate() {
+    if (this.breakPointsKeys) {
+      this.breakPointsKeys.forEach(key => {
+        if (document.documentElement.clientWidth > key) {
+          for (const option in this.breakPoints[key]) {
+            this[option] = this.breakPoints[key][option];
+            break;
           }
-        });
-      }
-      this.updateSlider();
-    });
+        }
+      });
+    }
+    this.updateSlider();
+  }
+
+  resizeListener() {
+    window.addEventListener('resize', this.resListener);
+  }
+
+  removeRsizeListener() {
+    window.removeEventListener('resize', this.resListener);
+  }
+
+  clearStyles() {
+    console.log(this);
+    this.wraper.style.overflow = '';
+    this.slider.style.justifyContent = '';
+    this.slider.style.width = '';
+    this.slider.style.maxWidth = '';
+    this.slide.forEach(slide => slide.style.width = '');
+  }
+
+  deleteSlider() {
+    this.removeListeners.call(this);
+    this.removeRsizeListener.call(this);
+    this.clearStyles.call(this);
   }
 }
 

@@ -6006,6 +6006,7 @@ div.wave-block:nth-child(17):after {
 }
 
 .popup-portfolio-slider {
+  display: flex;
   position: relative;
   height: 100%;
 }
@@ -6473,6 +6474,10 @@ div.wave-block:nth-child(17):after {
 
 .popup-portfolio-text__value_big span sup {
   font-size: 14px;
+}
+
+.popup-portfolio-text-active {
+  display: flex;
 }
 
 .popup-transparency-slider {
@@ -7720,6 +7725,12 @@ div.wave-block:nth-child(17):after {
   cursor: pointer;
   background: transparent;
   background-size: contain;
+}
+
+@media (max-width: 1024px) {
+  .button_o {
+    width: 100%;
+  }
 }
 
 .button_o svg {

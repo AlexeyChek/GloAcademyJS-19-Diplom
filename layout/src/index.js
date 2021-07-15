@@ -15,21 +15,6 @@ new MenuAndSmooth('.popup-dialog-menu', '.menu__icon', '.close-menu').run();
 
 smooth();
 
-const popup = new Popup();
-popup.addPopup({
-  callerSelector: ['.popup-servises'],
-  selector: '.popup-repair-types',
-  activeClass: 'popup-active',
-  closeBtn: '.close'
-});
-popup.addPopup({
-  callerSelector: ['.link-privacy'],
-  selector: '.popup-privacy',
-  activeClass: 'popup-active',
-  closeBtn: '.close'
-});
-popup.run();
-
 new MaskPhone('input[name="phone"]').init();
 
 new SendForm('form').init();
@@ -60,19 +45,38 @@ const repairSliders = () => {
   return sliders;
 };
 
-
-const tabs = new Tabs(
-  '.nav-list-repair',
-  '.repair-types-nav__item',
-  'active',
-  repairSliders()
-).init();
+const repairTabs = new Tabs({
+  wraper: '.nav-list-repair',
+  tabsBtn: '.repair-types-nav__item',
+  tabsBtnActivClass: 'active',
+  tabs: repairSliders()
+});
+repairTabs.init();
 
 let repairSlider = null;
 let formulaSlider = null;
 const formulaSliderWraper = document.querySelector('.nav-list-repair');
 const tabsBtn = document.querySelectorAll('.repair-types-nav__item');
 let portfolioSliderMobile = null;
+
+const portfolioPopupText = new Tabs({
+  wraper: '.popup-dialog-portfolio',
+  tabsBtn: '.popup-portfolio-text',
+  tabsBtnActivClass: 'popup-portfolio-text-active',
+});
+portfolioPopupText.init();
+
+const portfolioPopupSlider = new Slider({
+  wraper: '.popup-portfolio-slider-wraper',
+  slider: '.popup-portfolio-slider',
+  slide: '.popup-portfolio-slider__slide',
+  prev: '#popup_portfolio_left',
+  next: '#popup_portfolio_right',
+  slideNum: '.slider-counter-content__current',
+  slideCount: '.slider-counter-content__total',
+  callBack: portfolioPopupText.getActiveTab.bind(portfolioPopupText)
+});
+portfolioPopupSlider.init();
 
 const getSlidersTablet = () => {
   repairSlider = new Slider({
@@ -81,7 +85,9 @@ const getSlidersTablet = () => {
     slide: '.repair-types-nav__item',
     prev: '#nav-arrow-repair-left_base',
     next: '#nav-arrow-repair-right_base',
-  }).init();
+    callBack: repairTabs.getActiveTab.bind(repairTabs)
+  });
+  repairSlider.init();
 
   formulaSlider = new Slider({
     wraper: '.formula-slider-wrap',
@@ -90,7 +96,8 @@ const getSlidersTablet = () => {
     prev: '#formula-arrow_left',
     next: '#formula-arrow_right',
     slideShow: 3,
-  }).init();
+  });
+  formulaSlider.init();
 };
 
 const getSlidersMobile = () => {
@@ -101,8 +108,9 @@ const getSlidersMobile = () => {
     prev: '#portfolio-arrow-mobile_left',
     next: '#portfolio-arrow-mobile_right',
     slideNum: '.slider-counter-content__current',
-    slideCount: '.slider-counter-content__total'
-  }).init();
+    slideCount: '.slider-counter-content__total',
+  });
+  portfolioSliderMobile.init();
 };
 
 if (document.documentElement.clientWidth <= 1024) getSlidersTablet();
@@ -113,10 +121,10 @@ widthTableMatch.addEventListener('change', widthChange => {
   if (widthChange.matches) {
     getSlidersTablet();
   } else {
-    formulaSlider = null;
-    formulaSliderWraper.style = '';
-    tabsBtn.forEach(elem => elem.style = '');
+    repairSlider.deleteSlider.call(repairSlider);
     repairSlider = null;
+    formulaSlider.deleteSlider.call(formulaSlider);
+    formulaSlider = null;
   }
 });
 
@@ -134,9 +142,11 @@ const getSlidersDesctop = () => {
       '1140': { slideShow: 3 },
       '900': { slideShow: 2 },
       '575': { slideShow: 1 },
-    }
-  }).init();
+    },
+  });
+  portfolioSlider.init();
 };
+
 
 if (document.documentElement.clientWidth > 575) getSlidersDesctop();
 
@@ -151,7 +161,24 @@ widthMobileMatch.addEventListener('change', widthChange => {
   }
 });
 
-
-
-
+const popup = new Popup();
+popup.addPopup({
+  callerSelector: ['.popup-servises'],
+  selector: '.popup-repair-types',
+  activeClass: 'popup-active',
+  closeBtn: '.close'
+});
+popup.addPopup({
+  callerSelector: ['.link-privacy'],
+  selector: '.popup-privacy',
+  activeClass: 'popup-active',
+  closeBtn: '.close'
+});
+popup.addPopup({
+  callerSelector: ['.portfolio-slider__slide-frame'],
+  selector: '.popup-portfolio',
+  activeClass: 'popup-active',
+  closeBtn: '.close',
+});
+popup.run();
 

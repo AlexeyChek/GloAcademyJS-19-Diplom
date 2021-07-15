@@ -9,20 +9,20 @@ class Popup {
     callerSelector,
     selector,
     activeClass,
-    closeBtn
+    closeBtn,
   }) {
     this.popups.push({
       callerSelector: [...callerSelector],
       selector: document.querySelector(selector),
       activeClass,
-      closeBtn
+      closeBtn,
     });
   }
 
   togglePopup(target) {
     if (this.popup < 0) {
       for (let i = 0; i < this.popups.length; i++) {
-        this.popups[i].callerSelector.forEach(item => {
+        this.popups[i].callerSelector.forEach((item, index) => {
           if (target.closest(item)) {
             this.popups[i].selector.classList.add(this.popups[i].activeClass);
             this.popup = i;
