@@ -11,7 +11,7 @@ import Acardion from './modules/acardion';
 import GetDBInfo from './modules/getDBInfo';
 
 const dbInfo = new GetDBInfo({
-  server: './../../crm-backend/db.json',
+  server: '/crm-backend/db.json',
 
 });
 dbInfo.getInfo();
