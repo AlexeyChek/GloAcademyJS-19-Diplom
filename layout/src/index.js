@@ -257,7 +257,7 @@ const reviewsSlider = new Slider({
   paginationWraper: '.slider-dots-reviews',
   paginatinHTML: '<div class="dot dot-reviews switch"><div class="dot__inner"></div></div>',
   paginationSelector: '.dot-reviews',
-  paginationActiveClass: 'dot_active'
+  paginationActiveClass: '.dot_active'
 });
 reviewsSlider.init();
 
