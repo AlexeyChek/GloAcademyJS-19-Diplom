@@ -254,6 +254,10 @@ const reviewsSlider = new Slider({
   slide: '.reviews-slider__slide',
   prev: '#reviews-arrow_left',
   next: '#reviews-arrow_right',
+  paginationWraper: '.slider-dots-reviews',
+  paginatinHTML: '<div class="dot dot-reviews switch"><div class="dot__inner"></div></div>',
+  paginationSelector: '.dot-reviews',
+  paginationActiveClass: 'dot_active'
 });
 reviewsSlider.init();
 

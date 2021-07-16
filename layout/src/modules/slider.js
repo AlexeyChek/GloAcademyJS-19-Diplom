@@ -10,7 +10,11 @@ class Slider {
     isDisabled,
     slideShow,
     breakPoints,
-    callBack
+    callBack,
+    paginationWraper,
+    paginatinHTML,
+    paginationSelector,
+    paginationActiveClass
   }) {
     this.wraper = document.querySelector(wraper);
     this.slider = this.wraper.querySelector(slider);
@@ -25,7 +29,7 @@ class Slider {
     this.slideNum = this.wraper.parentNode.querySelector(slideNum);
     this.slideCount = this.wraper.parentNode.querySelector(slideCount);
     this.isDisabled = !!isDisabled;
-    this.slideShow = slideShow || 1;
+    this.slideShow = +slideShow || 1;
     this.breakPoints = breakPoints;
     if (breakPoints) {
       this.breakPointsKeys = Object.keys(breakPoints);
@@ -36,9 +40,38 @@ class Slider {
       const target = event.target;
       if (target.closest(this.prev)) this.prevSlide.call(this);
       if (target.closest(this.next)) this.nextSlide.call(this);
+      if (target.closest(this.paginationSelector)) this.getSlideFromPagination.call(this, target);
     };
     this.resListener = this.recalculate.bind(this);
     this.callBack = callBack || null;
+    this.paginationWraper = document.querySelector(paginationWraper);
+    this.paginatinHTML = paginatinHTML;
+    this.paginationSelector = paginationSelector;
+    this.paginationActiveClass = paginationActiveClass;
+    this.paginationDots = '';
+  }
+
+  getSlideFromPagination(target) {
+    this.paginationDots.forEach((dot, index) => {
+      if (target.closest(this.paginationSelector) === dot) {
+        this.position = index;
+        this.moveSlider.call(this);
+        return;
+      }
+    });
+  }
+
+  getPagination() {
+    this.paginationWraper.textContent = '';
+    for (let i = 0; i < this.slide.length + 1 - this.slideShow; i++) {
+      this.paginationWraper.insertAdjacentHTML('beforeend', this.paginatinHTML);
+    }
+    this.paginationDots = this.paginationWraper.querySelectorAll(this.paginationSelector);
+  }
+
+  movePagination() {
+    this.paginationDots.forEach(dot => dot.classList.remove(this.paginationActiveClass));
+    this.paginationDots[this.position].classList.add(this.paginationActiveClass);
   }
 
   getPosition() {
@@ -88,8 +121,9 @@ class Slider {
       }
       if (this.slideNum) this.slideNum.textContent = +this.position + 1;
       if (this.slideCount) this.slideCount.textContent = this.slide.length;
+      if (this.paginationDots) this.movePagination(this.position);
+      if (this.callBack) this.callBack(this.position);
     }
-    if (this.callBack) this.callBack(this.position);
   }
 
   enableSlider() {
@@ -129,6 +163,7 @@ class Slider {
   }
 
   init() {
+    if (this.paginationWraper) this.getPagination.call(this);
     this.recalculate.call(this);
     this.updateSlider();
     this.addListeners();

@@ -9120,10 +9120,6 @@ strong {
   transform: scale(1, -1);
 }
 
-.slider-dots {
-  display: none;
-}
-
 .formula-item-popup_reverse {
   bottom: auto;
   top: 140px;
