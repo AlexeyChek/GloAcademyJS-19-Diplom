@@ -32,24 +32,23 @@ class Popup {
   }
 
   togglePopup({ target, activeSelector }) {
-    if (this.popup < 0) {
-      for (let i = 0; i < this.popups.length; i++) {
-        if (activeSelector) {
-          if (this.popups[i].activeSelector === activeSelector) {
+    for (let i = 0; i < this.popups.length; i++) {
+      if (activeSelector) {
+        if (this.popups[i].activeSelector === activeSelector) {
+          this.getActiveTab.call(this, i);
+          return;
+        }
+      } else {
+        this.popups[i].callerSelector.forEach(item => {
+          if (target.closest(item)) {
             this.getActiveTab.call(this, i);
             return;
           }
-        } else {
-          this.popups[i].callerSelector.forEach(item => {
-            if (target.closest(item)) {
-              this.getActiveTab.call(this, i);
-              return;
-            }
-          });
-        }
+        });
       }
-    } else {
-      if (target.closest(this.popups[this.popup].closeBtn) || target === this.popups[this.popup].selector) this.hidePopup.call(this, this.popup);
+    }
+    for (let i = 0; i < this.popups.length; i++) {
+      if (target.closest(this.popups[i].closeBtn) || (target === this.popups[i].selector)) this.hidePopup.call(this, i);
     }
   }
 
