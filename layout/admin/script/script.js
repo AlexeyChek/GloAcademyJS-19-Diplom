@@ -19,10 +19,19 @@ class User {
     this.base = 'table.html';
   }
 
+  addListener() {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      this.checkAdmin.call(this, userName.value, userPassword.value);
+    });
+  }
+
+
   checkEnter() {
     if (document.location.href.slice(document.location.href.lastIndexOf('/') + 1) !== this.site) {
       if (document.cookie !== 'admin=enter') document.location.replace(this.site);
     }
+    this.addListener();
   }
 
   checkAdmin(userName, userPassword) {
@@ -61,9 +70,4 @@ class User {
 
 const admin = new User();
 admin.checkEnter();
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-  admin.checkAdmin(userName.value, userPassword.value);
-});
 
