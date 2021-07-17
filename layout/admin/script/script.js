@@ -125,18 +125,23 @@ if (admin.checkEnter()) {
         </tr>
         `;
         this.id = '';
+        this.workType;
       }
 
       getData(filter) {
-        const data = this.connect.getData(filter);
-        tbody.textContent = '';
-        if (data) data.forEach(item => tbody.insertAdjacentHTML('beforeend', this.tr(item)));
+        this.workType = filter;
+        this.connect.getData(filter)
+          .then(response => {
+            tbody.textContent = '';
+            response.forEach(item => tbody.insertAdjacentHTML('beforeend', this.tr(item)));
+          });
       }
 
       showAddModal() {
         form.dataset.id = '';
         modalHeader.textContent = 'Добавение новой услуги';
         modal.style.display = 'flex';
+        if (this.workType !== 'Все услуги') type.value = this.workType;
       }
 
       showRewireModal(id) {
@@ -163,21 +168,30 @@ if (admin.checkEnter()) {
           units: units.value,
           cost: cost.value
         };
-        if (id) {
-          this.connect.rewireInfo(data, id);
-        } else {
-          this.connect.addInfo(data);
-        }
+        const submit = () => {
+          if (id) {
+            return this.connect.rewireInfo(data, id);
+          } else {
+            return this.connect.addInfo(data);
+          }
+        };
+        submit().then(() => {
+          this.clearForm();
+          this.hideModal();
+          this.getData(data.type);
+        });
       }
 
       removeItem(id) {
         this.connect.removeData(id);
+        this.getData(this.workType);
       }
 
       actions(target) {
         if (target.closest('.btn-addItem')) this.showAddModal();
         if (target.closest('.button__close') || target === modal) this.hideModal();
         if (target.closest('.cancel-button')) {
+          event.preventDefault();
           this.clearForm();
           this.hideModal();
         }
@@ -202,7 +216,6 @@ if (admin.checkEnter()) {
         });
         form.addEventListener('submit', e => {
           e.preventDefault();
-          console.log('submit');
           this.submitForm.call(this, form.dataset.id);
         });
       }
@@ -227,8 +240,8 @@ if (admin.checkEnter()) {
       server,
     }) {
       this.server = server;
-      this.db;
       this.worksType = new Set();
+      this.db = {};
     }
 
     getSelectWorkType() {
@@ -240,13 +253,18 @@ if (admin.checkEnter()) {
       `));
     }
 
-    connect(body) {
-      return fetch(this.server + body)
+    connect() {
+      return fetch(this.server + '/api/items')
         .then(response => {
           if (response.status !== 200) {
             throw new Error('DB-error: Network status not 200');
           }
           return response.json();
+        })
+        .then(response => {
+          this.db = response;
+          this.getSelectWorkType();
+          return response;
         })
         .catch(error => console.error(error));
     }
@@ -272,6 +290,7 @@ if (admin.checkEnter()) {
             throw new Error('DB-error: Network status not 200');
           }
           this.getSelectWorkType.call(this);
+          return response.json();
         })
         .catch(error => console.error(error));
     }
@@ -286,6 +305,7 @@ if (admin.checkEnter()) {
             throw new Error('DB-error: Network status not 200');
           }
           this.getSelectWorkType.call(this);
+          return response.json();
         })
         .catch(error => console.error(error));
     }
@@ -296,28 +316,29 @@ if (admin.checkEnter()) {
         body: JSON.stringify({ type, name, units, cost })
       })
         .then(response => {
-          if (response.status !== 200) {
-            throw new Error('DB-error: Network status not 200');
+          if (response.status < 200 || response.status > 299) {
+            throw new Error('connect DB error');
           }
           this.getSelectWorkType.call(this);
+          return response.json();
         })
         .catch(error => console.error(error));
     }
 
     getData(filter) {
       if (filter === 'Все услуги') {
-        return this.db;
+        return this.connect();
       } else {
-        return this.db.filter(item => item.type === filter);
+        return this.connect().then(response => response.filter(item => item.type === filter));
       }
     }
 
     init() {
-      this.connect('/api/items')
+      this.getData()
         .then(response => {
-          this.db = response;
           this.getSelectWorkType.call(this);
           start();
+          return response;
         });
     }
   }
@@ -325,10 +346,6 @@ if (admin.checkEnter()) {
     server: 'http://localhost:3000',
   });
   connectDB.init();
-
-
-  // работа с таблицей.
-
 }
 
 
