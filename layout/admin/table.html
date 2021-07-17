@@ -15,11 +15,24 @@
 	<main class="main">
 		<div id="container" class="container">
 			<h1 class="title-page">Список услуг</h1>
-			<label>
-				<select name="typeItem" id="typeItem">
-				</select>
-				выбрать тип
-			</label>
+			<div class="search-container">
+				<label class="select-label">
+					<select name="typeItem" id="typeItem">
+					</select>
+					выбрать тип
+				</label>
+				<div class="search-label">
+					<span>найти:</span>
+					<input name="search" id="search">
+					<button class="button btn-search">
+						<span class="svg_ui">
+							<svg class="icon-btn-searchItem">
+								<use xlink:href="./img/sprite.svg#search"></use>
+							</svg>
+					</button>
+					</input>
+				</div>
+			</div>
 			<div class="table__wrapper">
 				<table id="table" class="table">
 					<thead>

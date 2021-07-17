@@ -89,7 +89,9 @@ if (admin.checkEnter()) {
       type = document.getElementById('type'),
       name = document.getElementById('name'),
       units = document.getElementById('units'),
-      cost = document.getElementById('cost');
+      cost = document.getElementById('cost'),
+      search = document.getElementById('search');
+
 
 
     class TableData {
@@ -140,12 +142,13 @@ if (admin.checkEnter()) {
       }
 
       sotrData({
-        id, 
+        // id, 
       }) {
 
       }
 
       getData(filter) {
+        search.value = '';
         this.workType = filter;
         this.connect.getData(filter)
           .then(response => {
@@ -153,6 +156,18 @@ if (admin.checkEnter()) {
             this.db = response;
             this.showResult.call(this);
           });
+      }
+
+      searchData() {
+        if (search.value) {
+          this.connect.getDataSearch(search.value)
+            .then(response => {
+              tbody.textContent = '';
+              this.db = response;
+              this.workType = 'Все услуги';
+              this.showResult.call(this);
+            });
+        }
       }
 
       showAddModal() {
@@ -197,12 +212,14 @@ if (admin.checkEnter()) {
           this.clearForm();
           this.hideModal();
           this.getData(data.type);
+          search.value = '';
         });
       }
 
       removeItem(id) {
         this.connect.removeData(id);
         this.getData(this.workType);
+        search.value = '';
       }
 
       actions(target) {
@@ -215,6 +232,7 @@ if (admin.checkEnter()) {
         }
         if (target.closest('.action-change')) this.showRewireModal(target.closest('tr').id);
         if (target.closest('.action-remove')) this.removeItem(target.closest('tr').id);
+        if (target.closest('.btn-search')) this.searchData.call(this);
       }
 
       clearForm() {
@@ -283,6 +301,18 @@ if (admin.checkEnter()) {
           this.getSelectWorkType();
           return response;
         })
+        .catch(error => console.error(error));
+    }
+
+    getDataSearch(filter) {
+      return fetch(this.server + `/api/items/?search=${filter}`)
+        .then(response => {
+          if (response.status < 200 || response.status > 299) {
+            throw new Error('DB-error: Network status not 200');
+          }
+          return response.json();
+        })
+        .then(response => response)
         .catch(error => console.error(error));
     }
 
