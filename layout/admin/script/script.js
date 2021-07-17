@@ -82,9 +82,14 @@ if (admin.checkEnter()) {
   let selectWorkType = document.getElementById('typeItem');
 
   const start = () => {
-    const tbody = document.getElementById('tbody');
-    const modal = document.getElementById('modal');
-    const form = document.querySelector('form');
+    const tbody = document.getElementById('tbody'),
+      modal = document.getElementById('modal'),
+      form = document.querySelector('form'),
+      modalHeader = document.querySelector('.modal__header'),
+      type = document.getElementById('type'),
+      name = document.getElementById('name'),
+      units = document.getElementById('units'),
+      cost = document.getElementById('cost');
 
 
     class TableData {
@@ -119,6 +124,7 @@ if (admin.checkEnter()) {
           </td>
         </tr>
         `;
+        this.id = '';
       }
 
       getData(filter) {
@@ -127,27 +133,63 @@ if (admin.checkEnter()) {
         if (data) data.forEach(item => tbody.insertAdjacentHTML('beforeend', this.tr(item)));
       }
 
-      showModal() {
+      showAddModal() {
+        form.dataset.id = '';
+        modalHeader.textContent = 'Добавение новой услуги';
         modal.style.display = 'flex';
+      }
+
+      showRewireModal(id) {
+        form.dataset.id = id;
+        modalHeader.textContent = 'Редактировать услугу';
+        modal.style.display = 'flex';
+        const data = this.connect.getDataId(id)
+          .then(response => {
+            type.value = response.type;
+            name.value = response.name;
+            units.value = response.units;
+            cost.value = response.cost;
+          });
       }
 
       hideModal() {
         modal.style = '';
       }
 
-      submitForm() {
+      submitForm(id) {
         const data = {
-          type: form.elements.type.value,
-          name: form.elements.name.value,
-          units: form.elements.units.value,
-          cost: form.elements.cost.value,
+          type: type.value,
+          name: name.value,
+          units: units.value,
+          cost: cost.value
         };
-        console.log(data);
+        if (id) {
+          this.connect.rewireInfo(data, id);
+        } else {
+          this.connect.addInfo(data);
+        }
+      }
+
+      removeItem(id) {
+        this.connect.removeData(id);
       }
 
       actions(target) {
-        if (target.closest('.btn-addItem')) this.showModal();
+        if (target.closest('.btn-addItem')) this.showAddModal();
         if (target.closest('.button__close') || target === modal) this.hideModal();
+        if (target.closest('.cancel-button')) {
+          this.clearForm();
+          this.hideModal();
+        }
+        if (target.closest('.action-change')) this.showRewireModal(target.closest('tr').id);
+        if (target.closest('.action-remove')) this.removeItem(target.closest('tr').id);
+      }
+
+      clearForm() {
+        type.value = '';
+        name.value = '';
+        units.value = '';
+        cost.value = '';
       }
 
       addListeners() {
@@ -158,9 +200,10 @@ if (admin.checkEnter()) {
           const target = event.target;
           this.actions.call(this, target);
         });
-        form.addEventListener('submit', event => {
-          event.preventDefault();
-          this.submitForm.call(this);
+        form.addEventListener('submit', e => {
+          e.preventDefault();
+          console.log('submit');
+          this.submitForm.call(this, form.dataset.id);
         });
       }
 
@@ -195,7 +238,6 @@ if (admin.checkEnter()) {
       this.worksType.forEach(item => selectWorkType.insertAdjacentHTML('beforeend', `
         <option value="${item}">${item}</option>      
       `));
-      start();
     }
 
     connect(body) {
@@ -206,7 +248,59 @@ if (admin.checkEnter()) {
           }
           return response.json();
         })
-        // .then(response => response)
+        .catch(error => console.error(error));
+    }
+
+    getDataId(id) {
+      return fetch(this.server + `/api/items/${id}`)
+        .then(response => {
+          if (response.status !== 200) {
+            throw new Error('DB-error: Network status not 200');
+          }
+          return response.json();
+        })
+        .then(response => response)
+        .catch(error => console.error(error));
+    }
+
+    removeData(id) {
+      return fetch(this.server + `/api/items/${id}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (response.status !== 200) {
+            throw new Error('DB-error: Network status not 200');
+          }
+          this.getSelectWorkType.call(this);
+        })
+        .catch(error => console.error(error));
+    }
+
+    rewireInfo({ type, name, units, cost }, id) {
+      return fetch(this.server + `/api/items/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ type, name, units, cost })
+      })
+        .then(response => {
+          if (response.status !== 200) {
+            throw new Error('DB-error: Network status not 200');
+          }
+          this.getSelectWorkType.call(this);
+        })
+        .catch(error => console.error(error));
+    }
+
+    addInfo({ type, name, units, cost }) {
+      return fetch(this.server + '/api/items', {
+        method: 'POST',
+        body: JSON.stringify({ type, name, units, cost })
+      })
+        .then(response => {
+          if (response.status !== 200) {
+            throw new Error('DB-error: Network status not 200');
+          }
+          this.getSelectWorkType.call(this);
+        })
         .catch(error => console.error(error));
     }
 
@@ -223,6 +317,7 @@ if (admin.checkEnter()) {
         .then(response => {
           this.db = response;
           this.getSelectWorkType.call(this);
+          start();
         });
     }
   }
