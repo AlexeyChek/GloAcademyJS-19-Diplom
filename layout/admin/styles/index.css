@@ -426,9 +426,6 @@ body {
   scroll-snap-align: start;
 }
 
-.table-th:first-child {
-  color: var(--firm_color);
-}
 
 .th-id {
   min-width: 130px;
@@ -638,4 +635,17 @@ body {
 
 .btn-search:hover .icon-btn-searchItem {
   fill: #c50808;
+}
+
+.sorted {
+  font-weight: bold;
+  color: blue;
+}
+
+.sorted span {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
 }

@@ -9203,3 +9203,11 @@ strong {
 #services-arrow_right {
   top: 170px;
 }
+
+@media (min-width: 575px) {
+
+  #services-arrow_left,
+  #services-arrow_right {
+    display: none;
+  }
+}

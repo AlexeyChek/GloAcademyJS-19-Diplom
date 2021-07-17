@@ -127,13 +127,9 @@ if (admin.checkEnter()) {
         </tr>
         `;
         this.id = '';
-        this.workType;
+        this.workType = 'Все услуги';
         this.db;
-        this.selected = 0;
-        // this.sort = {
-        //   id : forv,
-        //   type : true
-        // }
+        // this.selected = 0;
       }
 
       showResult() {
@@ -141,9 +137,7 @@ if (admin.checkEnter()) {
         selectWorkType.value = this.workType;
       }
 
-      sotrData({
-        // id, 
-      }) {
+      sotrData() {
 
       }
 
@@ -244,7 +238,7 @@ if (admin.checkEnter()) {
 
       addListeners() {
         selectWorkType.addEventListener('change', () => {
-          this.selected = selectWorkType.selectedIndex;
+          // this.selected = selectWorkType.selectedIndex;
           this.getData.call(this, selectWorkType.options[selectWorkType.selectedIndex].value);
         });
         document.addEventListener('click', event => {
