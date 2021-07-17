@@ -124,6 +124,8 @@ const getSlidersTablet = () => {
   }, 1000);
 };
 
+let servicesSlider = null;
+
 const getSlidersMobile = () => {
   portfolioSliderMobile = new Slider({
     wraper: '.portfolio-slider-wraper-mobile',
@@ -135,6 +137,15 @@ const getSlidersMobile = () => {
     slideCount: '.slider-counter-content__total',
   });
   portfolioSliderMobile.init();
+  
+  servicesSlider = new Slider({
+    wraper: '.services-slider',
+    slider: '.services-slider-wrapper',
+    slide: '.services-slider__slide',
+    prev: '#services-arrow_left',
+    next: '#services-arrow_right',
+  });
+  servicesSlider.init();
 };
 
 if (document.documentElement.clientWidth <= 1024) getSlidersTablet();
@@ -185,6 +196,7 @@ widthMobileMatch.addEventListener('change', widthChange => {
   } else {
     if (portfolioSliderMobile) portfolioSliderMobile.deleteSlider.call(portfolioSliderMobile);
     portfolioSliderMobile = null;
+    if (servicesSlider) servicesSlider.deleteSlider.call(servicesSlider);
     getSlidersDesltop();
   }
 });
