@@ -126,6 +126,8 @@ if (admin.checkEnter()) {
         `;
         this.id = '';
         this.workType;
+        this.db;
+        this.selected = 0;
       }
 
       getData(filter) {
@@ -134,6 +136,7 @@ if (admin.checkEnter()) {
           .then(response => {
             tbody.textContent = '';
             response.forEach(item => tbody.insertAdjacentHTML('beforeend', this.tr(item)));
+            selectWorkType.value = this.workType;
           });
       }
 
@@ -148,7 +151,7 @@ if (admin.checkEnter()) {
         form.dataset.id = id;
         modalHeader.textContent = 'Редактировать услугу';
         modal.style.display = 'flex';
-        const data = this.connect.getDataId(id)
+        this.connect.getDataId(id)
           .then(response => {
             type.value = response.type;
             name.value = response.name;
@@ -208,6 +211,7 @@ if (admin.checkEnter()) {
 
       addListeners() {
         selectWorkType.addEventListener('change', () => {
+          this.selected = selectWorkType.selectedIndex;
           this.getData.call(this, selectWorkType.options[selectWorkType.selectedIndex].value);
         });
         document.addEventListener('click', event => {
@@ -233,8 +237,6 @@ if (admin.checkEnter()) {
     tableData.init();
   };
 
-
-  // работа с db.json
   class ConnectDB {
     constructor({
       server,
