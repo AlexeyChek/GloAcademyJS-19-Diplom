@@ -217,10 +217,10 @@ if (document.documentElement.clientWidth <= 1090) getTransparencySlider();
 const widthTransparencySliderMatch = window.matchMedia('(max-width: 1090px)');
 widthTransparencySliderMatch.addEventListener('change', widthChange => {
   if (widthChange.matches) {
+    getTransparencySlider();
+  } else {
     if (transparencySlider) transparencySlider.deleteSlider.call(transparencySlider);
     transparencySlider = null;
-  } else {
-    getTransparencySlider();
   }
 });
 

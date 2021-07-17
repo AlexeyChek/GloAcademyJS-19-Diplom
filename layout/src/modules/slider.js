@@ -193,11 +193,10 @@ class Slider {
   }
 
   clearStyles() {
-    this.wraper.style.overflow = '';
-    this.slider.style.justifyContent = '';
-    this.slider.style.width = '';
-    this.slider.style.maxWidth = '';
-    this.slide.forEach(slide => slide.style.width = '');
+    this.wraper.style = '';
+    this.slider.style = '';
+    this.slider.style = '';
+    this.slide.forEach(slide => slide.style = '');
   }
 
   deleteSlider() {

@@ -128,6 +128,21 @@ if (admin.checkEnter()) {
         this.workType;
         this.db;
         this.selected = 0;
+        // this.sort = {
+        //   id : forv,
+        //   type : true
+        // }
+      }
+
+      showResult() {
+        this.db.forEach(item => tbody.insertAdjacentHTML('beforeend', this.tr(item)));
+        selectWorkType.value = this.workType;
+      }
+
+      sotrData({
+        id, 
+      }) {
+
       }
 
       getData(filter) {
@@ -135,8 +150,8 @@ if (admin.checkEnter()) {
         this.connect.getData(filter)
           .then(response => {
             tbody.textContent = '';
-            response.forEach(item => tbody.insertAdjacentHTML('beforeend', this.tr(item)));
-            selectWorkType.value = this.workType;
+            this.db = response;
+            this.showResult.call(this);
           });
       }
 
