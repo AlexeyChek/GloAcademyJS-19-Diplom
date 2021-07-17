@@ -642,7 +642,7 @@ body {
   color: blue;
 }
 
-.sorted span {
+.sorted-rev span {
   transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);

@@ -91,8 +91,20 @@ if (admin.checkEnter()) {
       units = document.getElementById('units'),
       cost = document.getElementById('cost'),
       search = document.getElementById('search');
-
-
+    const sortItemsSelector = {
+      id: '.th-id',
+      type: '.th-type',
+      name: '.th-name',
+      units: '.th-units',
+      cost: '.th-cost',
+    };
+    const sortItems = {
+      id: document.querySelector('.th-id'),
+      type: document.querySelector('.th-type'),
+      name: document.querySelector('.th-name'),
+      units: document.querySelector('.th-units'),
+      cost: document.querySelector('.th-cost'),
+    };
 
     class TableData {
       constructor({
@@ -128,17 +140,48 @@ if (admin.checkEnter()) {
         `;
         this.id = '';
         this.workType = 'Все услуги';
-        this.db;
-        // this.selected = 0;
+        this.db = [];
+        this.sortSelector = {
+          selector: '',
+          direction: 1,
+        };
       }
 
       showResult() {
+        tbody.textContent = '';
         this.db.forEach(item => tbody.insertAdjacentHTML('beforeend', this.tr(item)));
         selectWorkType.value = this.workType;
       }
 
-      sotrData() {
+      sotrData(target) {
+        let selector = '';
+        let direction = '';
+        for (const key in sortItemsSelector) {
+          if (target.closest(sortItemsSelector[key])) selector = key;
+        }
+        if (selector) {
+          if (this.sortSelector.selector === selector) {
+            direction = this.sortSelector.direction * -1;
+          } else {
+            direction = 1;
+          }
+          this.unsort.call(this);
+          this.sortSelector.selector = selector;
+          this.sortSelector.direction = direction;
+          this.db.sort((a, b) => ((a[selector] > b[selector]) ? -direction : direction));
+          sortItems[selector].classList.add('sorted');
+          if (direction < 0) sortItems[selector].classList.add('sorted-rev');
+          this.showResult();
+        }
+      }
 
+      unsort() {
+        this.sortSelector.selector = '';
+        this.sortSelector.direction = 1;
+        for (const key in sortItems) {
+          sortItems[key].classList.remove('sorted');
+          sortItems[key].classList.remove('sorted-rev');
+        }
       }
 
       getData(filter) {
@@ -150,6 +193,7 @@ if (admin.checkEnter()) {
             this.db = response;
             this.showResult.call(this);
           });
+        this.unsort();
       }
 
       searchData() {
@@ -162,6 +206,7 @@ if (admin.checkEnter()) {
               this.showResult.call(this);
             });
         }
+        this.unsort();
       }
 
       showAddModal() {
@@ -227,6 +272,7 @@ if (admin.checkEnter()) {
         if (target.closest('.action-change')) this.showRewireModal(target.closest('tr').id);
         if (target.closest('.action-remove')) this.removeItem(target.closest('tr').id);
         if (target.closest('.btn-search')) this.searchData.call(this);
+        if (target.closest('thead')) this.sotrData.call(this, target);
       }
 
       clearForm() {
