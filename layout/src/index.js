@@ -137,13 +137,15 @@ const getSlidersMobile = () => {
     slideCount: '.slider-counter-content__total',
   });
   portfolioSliderMobile.init();
-  
+
   servicesSlider = new Slider({
     wraper: '.services-slider',
     slider: '.services-slider-wrapper',
     slide: '.services-slider__slide',
     prev: '#services-arrow_left',
     next: '#services-arrow_right',
+    loop: true,
+    autoplay: 2000,
   });
   servicesSlider.init();
 };

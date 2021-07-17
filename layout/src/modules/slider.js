@@ -14,9 +14,12 @@ class Slider {
     paginationWraper,
     paginatinHTML,
     paginationSelector,
-    paginationActiveClass
+    paginationActiveClass,
+    loop,
+    autoplay
   }) {
     this.wraper = document.querySelector(wraper);
+    this.wraperSelector = wraper;
     this.slider = this.wraper.querySelector(slider);
     this.slide = this.slider.querySelectorAll(slide);
     this.prev = prev;
@@ -42,6 +45,14 @@ class Slider {
       if (target.closest(this.next)) this.nextSlide.call(this);
       if (target.closest(this.paginationSelector)) this.getSlideFromPagination.call(this, target);
     };
+    this.startAutoplayListener = event => {
+      const target = event.target;
+      if (target.closest(this.wraperSelector) || target.closest(this.prev) || target.closest(this.next)) this.getAutoplay.call(this);
+    };
+    this.stopAutoplayListener = event => {
+      const target = event.target;
+      if (target.closest(this.wraperSelector) || target.closest(this.prev) || target.closest(this.next)) this.removeAutoplay.call(this);
+    };
     this.resListener = this.recalculate.bind(this);
     this.callBack = callBack || null;
     this.paginationWraper = document.querySelector(paginationWraper);
@@ -49,6 +60,9 @@ class Slider {
     this.paginationSelector = paginationSelector;
     this.paginationActiveClass = paginationActiveClass;
     this.paginationDots = '';
+    this.loop = false || loop;
+    this.autoplay = autoplay;
+    this.autoplayInterval;
   }
 
   getSlideFromPagination(target) {
@@ -109,12 +123,12 @@ class Slider {
   moveSlider() {
     if (!this.isDisabled) {
       this.slider.style.transform = `translateX(-${this.position * this.sliderWidth / this.slideShow}px)`;
-      if (this.position === 0) {
+      if (!this.loop && this.position === 0) {
         this.prevBtn.classList.add('unvisible');
       } else {
         this.prevBtn.classList.remove('unvisible');
       }
-      if (this.position === this.slide.length - this.slideShow) {
+      if (!this.loop && this.position === this.slide.length - this.slideShow) {
         this.nextBtn.classList.add('unvisible');
       } else {
         this.nextBtn.classList.remove('unvisible');
@@ -139,15 +153,17 @@ class Slider {
   }
 
   prevSlide() {
-    if (this.position > 0) {
+    if (this.position > 0 || this.loop) {
       this.position--;
+      if (this.position < 0) this.position = this.slide.length - +this.slideShow;
       this.moveSlider.call(this);
     }
   }
 
   nextSlide() {
-    if (this.position < this.slide.length - this.slideShow) {
+    if (this.position < (this.slide.length - +this.slideShow) || this.loop) {
       this.position++;
+      if (this.position > (this.slide.length - +this.slideShow)) this.position = 0;
       this.moveSlider.call(this);
     }
   }
@@ -155,11 +171,25 @@ class Slider {
   addListeners() {
     if (!this.isDisabled) {
       this.wraper.parentNode.parentNode.addEventListener('click', this.listener);
+      if (this.autoplay) {
+        this.wraper.parentNode.addEventListener('mouseover', this.stopAutoplayListener);
+        this.wraper.parentNode.addEventListener('mouseout', this.startAutoplayListener);
+      }
     }
   }
 
   removeListeners() {
     this.wraper.parentNode.removeEventListener('click', this.listener);
+  }
+
+  getAutoplay() {
+    this.autoplayInterval = setInterval(() => {
+      this.nextSlide.call(this);
+    }, this.autoplay);
+  }
+
+  removeAutoplay() {
+    clearInterval(this.autoplayInterval);
   }
 
   init() {
@@ -168,6 +198,7 @@ class Slider {
     this.updateSlider();
     this.addListeners();
     this.resizeListener();
+    if (this.autoplay) this.getAutoplay.call(this);
   }
 
   recalculate() {
